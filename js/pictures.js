@@ -16,7 +16,10 @@ createAllPosts().forEach(({url, description, likes, comments}) => {
   pictureElement.querySelector('.picture__likes').textContent = likes;
   pictureElement.querySelector('.picture__comments').textContent = comments.length;
 
-  pictureElement.addEventListener('click', () => openBigPicture({url, description, likes, comments}));
+  pictureElement.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    openBigPicture({url, description, likes, comments});
+  });
 
   newPicturesFragment.append(pictureElement);
 });
