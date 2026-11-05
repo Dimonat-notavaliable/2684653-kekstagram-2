@@ -30,4 +30,29 @@ const createIntGenerator = () => {
   };
 };
 
-export {getRandomInteger, getRandomArrayElement, createIntGenerator};
+/**
+ * Создает новый HTML элемент
+ * @param {string} tag - Тэг элемента.
+ * @param {string} className - Класс элемента.
+ * @param {string} text - Внутренний текст элемента, опционально.
+ * @returns {HTMLElement} Созданный элемент
+ */
+const createDocumentElement = (tag, className, text) => {
+  const element = document.createElement(tag);
+  element.classList.add(className);
+
+  if (text) {
+    element.textContent = text;
+  }
+
+  return element;
+};
+
+/**
+ * Проверяет является ли нажатая клавиша клавишей Escape.
+ * @param {KeyboardEvent} evt - Событие клавиатуры.
+ * @returns {boolean} Является ли клавиша Escape.
+ */
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+export {getRandomInteger, getRandomArrayElement, createIntGenerator, createDocumentElement, isEscapeKey};
