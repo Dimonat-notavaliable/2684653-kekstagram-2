@@ -1,4 +1,6 @@
-import { getRandomInteger, getRandomArrayElement, createIntGenerator } from './util';
+import { getRandomInteger, getRandomArrayElement, createIntGenerator } from './util.js';
+
+const POST_COUNT = 25;
 
 const POST_DESCRIPTIONS = [
   'Крутое фото',
@@ -50,9 +52,6 @@ const CommentCount = {
   MAX: 30
 };
 
-const photos = [];
-
-
 const genPostId = createIntGenerator();
 const genCommentId = createIntGenerator();
 
@@ -97,12 +96,13 @@ const createPost = () => {
 
 /**
  * Создает все посты, отображаемые на странице
- * @param {number} postCount - Количество постов на странице
  */
-const createAllPosts = (postCount) => {
-  for (let i = 0; i < postCount; i++) {
+const createAllPosts = () => {
+  const photos = [];
+  for (let i = 0; i < POST_COUNT; i++) {
     photos.push(createPost());
   }
+  return photos;
 };
 
 
