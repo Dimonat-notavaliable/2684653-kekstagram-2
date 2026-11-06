@@ -55,4 +55,11 @@ const createDocumentElement = (tag, className, text) => {
  */
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-export {getRandomInteger, getRandomArrayElement, createIntGenerator, createDocumentElement, isEscapeKey};
+/**
+ * Проверяет массив на наличие дубликатов
+ * @param {Array} array - Массив элементов
+ * @returns {boolean} Есть ли в массиве дубликаты
+ */
+const isHaveDuplicates = (array) => array.some((item, idx) => array.indexOf(item) !== idx);
+
+export {getRandomInteger, getRandomArrayElement, createIntGenerator, createDocumentElement, isEscapeKey, isHaveDuplicates};
