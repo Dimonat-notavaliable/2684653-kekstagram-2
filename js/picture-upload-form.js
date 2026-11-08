@@ -1,9 +1,10 @@
 import { isEscapeKey, isHaveDuplicates } from './util.js';
 import { sendData } from './api.js';
-import { showSendMessage } from './data-error.js';
+import { showSendMessage, showLoadError } from './data-error.js';
 
 const HASHTAG_COUNT_LIMIT = 5;
 const MAX_COMMENT_LENGTH = 140;
+const ALLOWED_IMAGE_EXTENSIONS = ['jpeg', 'jpg', 'png'];
 
 const ImageScale = {
   DEFAULT: 100,
@@ -214,8 +215,16 @@ const setDefaultFormValues = () => {
 };
 
 const openUploadForm = () => {
-  toggleFormOverlay();
-  enableFormEscape();
+  const picture = fileInput.files[0];
+  const fileName = picture.name.toLowerCase();
+
+  if (ALLOWED_IMAGE_EXTENSIONS.some((ext) => fileName.endsWith(ext))) {
+    uploadPreview.src = URL.createObjectURL(picture);
+    toggleFormOverlay();
+    enableFormEscape();
+  } else {
+    showLoadError('Получен неподдерживаемый формат файла, выберите другое изображение');
+  }
 };
 
 function closeUploadForm () {
