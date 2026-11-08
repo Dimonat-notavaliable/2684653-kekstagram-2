@@ -19,6 +19,31 @@ const getRandomInteger = (minimum, maximum) => {
 const getRandomArrayElement = (array) => array[getRandomInteger(0, array.length - 1)];
 
 /**
+ * Возвращает случайные элементы из переданного массива.
+ *
+ * @param {Array} elements - Массив элементов
+ * @param {number} getCount - Количество элементов для выбора
+ * @returns {Array} Случайная выборка элементов из массива
+ *
+ */
+const getRandomArrayElements = (elements, getCount) => {
+  if (getCount >= elements.length) {
+    return elements;
+  }
+
+  const randomArray = [];
+
+  for (let i = 0; i < getCount; i++) {
+    let randomElement = getRandomArrayElement(elements);
+    while (randomArray.includes(randomElement)) {
+      randomElement = getRandomArrayElement(elements);
+    }
+    randomArray.push(randomElement);
+  }
+  return randomArray;
+};
+
+/**
  * Создает генератор последовательных натуральных чисел
  * @returns {object} Функция - генератор
  */
@@ -62,4 +87,21 @@ const isEscapeKey = (evt) => evt.key === 'Escape';
  */
 const isHaveDuplicates = (array) => array.some((item, idx) => array.indexOf(item) !== idx);
 
-export {getRandomInteger, getRandomArrayElement, createIntGenerator, createDocumentElement, isEscapeKey, isHaveDuplicates};
+
+/**
+ * Обертывает функцию для устранения дребезга
+ * @param {object} callback - Обертываемая функция
+ * @param {number} timeoutDelay - Задержка в мс
+ * @returns {object} Обернутая функция
+ */
+const debounce = (callback, timeoutDelay = 500) => {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+
+export {getRandomInteger, getRandomArrayElement, getRandomArrayElements, createIntGenerator, createDocumentElement, isEscapeKey, isHaveDuplicates, debounce};
