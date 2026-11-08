@@ -1,4 +1,6 @@
 import { isEscapeKey, isHaveDuplicates } from './util.js';
+import { sendData } from './api.js';
+import { showSendMessage } from './data-error.js';
 
 const HASHTAG_COUNT_LIMIT = 5;
 const MAX_COMMENT_LENGTH = 140;
@@ -24,7 +26,7 @@ const Effects = {
     step: 0.1
   },
   marvin: {
-    cssProperty: 'sepia',
+    cssProperty: 'invert',
     minValue: 0,
     maxValue: 100,
     step: 1,
@@ -57,6 +59,7 @@ const scaleSmaller = uploadForm.querySelector('.scale__control--smaller');
 const scaleBigger = uploadForm.querySelector('.scale__control--bigger');
 
 const effectsList = uploadForm.querySelector('.img-upload__effects');
+const defaultEffectRadio = uploadForm.querySelector('#effect-none');
 const effectLevel = uploadForm.querySelector('.img-upload__effect-level');
 const effectLevelSlider = effectLevel.querySelector('.effect-level__slider');
 const effectLevelValue = effectLevel.querySelector('.effect-level__value');
@@ -138,8 +141,15 @@ const onDocumentKeydown = (evt) => {
     closeUploadForm();
   }
 };
+const enableFormEscape = () => {
+  document.addEventListener('keydown', onDocumentKeydown);
+};
+const disableFormEscape = () => {
+  document.removeEventListener('keydown', onDocumentKeydown);
+};
 
 const resetImageEffect = () => {
+  defaultEffectRadio.checked = true;
   effectLevelValue.value = '';
   effectLevel.classList.add('hidden');
 
@@ -205,18 +215,27 @@ const setDefaultFormValues = () => {
 
 const openUploadForm = () => {
   toggleFormOverlay();
-  document.addEventListener('keydown', onDocumentKeydown);
+  enableFormEscape();
 };
 
 function closeUploadForm () {
   toggleFormOverlay();
   setDefaultFormValues();
-  document.removeEventListener('keydown', onDocumentKeydown);
+  disableFormEscape();
 }
 
 const onUploadFormSubmit = (evt) => {
-  if (!pristine.validate()) {
-    evt.preventDefault();
+  evt.preventDefault();
+
+  if (pristine.validate()) {
+    sendData(new FormData(evt.target))
+      .then(() => {
+        closeUploadForm();
+        showSendMessage('Фотография загружена');
+      })
+      .catch((err) => {
+        showSendMessage(err.message, false, disableFormEscape, enableFormEscape);
+      });
   }
 };
 
